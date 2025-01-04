@@ -29,5 +29,7 @@ router.post(
 router.get("/", ProductController.getAll);
 // Ruta para eliminar un producto
 router.delete("/:codigo_barras", ProductController.delete);
+// Ruta para actualizar un producto
+router.put("/:codigo_barras", ProductController.update);
 
 module.exports = router;

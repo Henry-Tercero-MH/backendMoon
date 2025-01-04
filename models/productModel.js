@@ -68,6 +68,42 @@ const Product = {
     );
     return result; // Retorna el resultado de la eliminación (affectedRows)
   },
+
+  // Método para actualizar un producto
+  update: async (
+    codigo_barras,
+    nombre_producto,
+    descripcion,
+    categoria,
+    cantidad,
+    precio_unitario,
+    precio_venta,
+    fecha_vencimiento
+  ) => {
+    const query = `
+    UPDATE productos 
+    SET 
+      nombre_producto = COALESCE(?, nombre_producto),
+      descripcion = COALESCE(?, descripcion),
+      categoria = COALESCE(?, categoria),
+      cantidad = COALESCE(?, cantidad),
+      precio_unitario = COALESCE(?, precio_unitario),
+      precio_venta = COALESCE(?, precio_venta),
+      fecha_vencimiento = COALESCE(?, fecha_vencimiento)
+    WHERE codigo_barras = ?`;
+
+    const [result] = await db.query(query, [
+      nombre_producto,
+      descripcion,
+      categoria,
+      cantidad,
+      precio_unitario,
+      precio_venta,
+      fecha_vencimiento,
+      codigo_barras,
+    ]);
+    return result;
+  },
 };
 
 module.exports = Product;
