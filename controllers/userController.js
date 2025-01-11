@@ -38,6 +38,7 @@ const UserController = {
       res.status(500).json({ message: "Error en el servidor" });
     }
   },
+
   login: async (req, res) => {
     const { email, password } = req.body;
 
@@ -69,9 +70,34 @@ const UserController = {
         }
       );
 
-      res.json({ message: "Inicio de sesión exitoso", token });
+      res.json({ message: "Inicio de sesión exitoso", token, rol: user.rol });
     } catch (error) {
       console.error(error); // Registra el error para depuración
+      res.status(500).json({ message: "Error en el servidor" });
+    }
+  },
+
+  getAll: async (req, res) => {
+    try {
+      const users = await User.getAll();
+      res.json(users);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Error en el servidor" });
+    }
+  },
+
+  delete: async (req, res) => {
+    const { id } = req.params;
+
+    try {
+      const deleted = await User.delete(id);
+      if (!deleted) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      res.status(200).json({ message: "Usuario eliminado exitosamente" });
+    } catch (error) {
+      console.error(error);
       res.status(500).json({ message: "Error en el servidor" });
     }
   },

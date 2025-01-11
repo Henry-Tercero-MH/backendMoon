@@ -17,6 +17,10 @@ app.use("/api/products", productRoutes);
 //factura rutas
 const facturaRoutes = require("./routes/facturaRoutes");
 app.use("/api", facturaRoutes);
+//ruta clientes
+const clientesRoutes = require("./routes/clientesRoutes");
+app.use("/api/clientes", clientesRoutes);
+
 // // Middleware para manejar errores globales
 app.use((err, req, res, next) => {
   console.error(err.stack); // Log del error en consola

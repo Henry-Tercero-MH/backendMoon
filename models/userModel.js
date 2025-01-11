@@ -69,6 +69,16 @@ const User = {
       throw error;
     }
   },
+
+  getAll: async () => {
+    try {
+      const [rows] = await db.query("SELECT * FROM usuarios");
+      return rows;
+    } catch (error) {
+      console.error("Error al obtener todos los usuarios:", error);
+      throw error;
+    }
+  },
 };
 
 module.exports = User;

@@ -26,4 +26,9 @@ router.post(
   UserController.login
 );
 
+// Agregar la ruta para obtener todos los usuarios
+router.get("/", UserController.getAll);
+// Agregar la ruta para eliminar un usuario
+router.delete("/:id", UserController.delete);
+
 module.exports = router;

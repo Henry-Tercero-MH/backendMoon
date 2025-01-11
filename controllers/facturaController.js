@@ -22,9 +22,43 @@ const crearFactura = async (req, res) => {
 
     const id_factura = facturaResult.insertId;
 
-    // Insertar detalles de factura
+    // Iterar sobre los detalles de la factura
     for (const detalle of detalles) {
       const { id_producto, cantidad, precio_unitario, subtotal } = detalle;
+
+      // Verificar si el producto tiene suficiente stock
+      const [producto] = await connection.query(
+        `SELECT cantidad FROM productos WHERE id_producto = ?`,
+        [id_producto]
+      );
+
+      if (producto.length === 0) {
+        await connection.rollback();
+        connection.release();
+        return res
+          .status(400)
+          .json({ success: false, message: "Producto no encontrado." });
+      }
+
+      if (producto[0].cantidad <= 0) {
+        await connection.rollback();
+        connection.release();
+        return res.status(400).json({
+          success: false,
+          message: `El producto con ID ${id_producto} está agotado.`,
+        });
+      }
+
+      if (producto[0].cantidad < cantidad) {
+        await connection.rollback();
+        connection.release();
+        return res.status(400).json({
+          success: false,
+          message: `No hay suficiente stock para el producto con ID ${id_producto}.`,
+        });
+      }
+
+      // Insertar detalle de la factura
       await connection.query(
         `INSERT INTO detalles_factura (id_factura, id_producto, cantidad, precio_unitario, subtotal)
                  VALUES (?, ?, ?, ?, ?)`,
