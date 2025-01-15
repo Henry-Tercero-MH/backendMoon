@@ -1,11 +1,19 @@
 const db = require("../config/db");
 
 const Cliente = {
-  create: async (nombre, telefono, credito, descripcion_credito, dpi, nit) => {
+  create: async (
+    nombre,
+    telefono,
+    credito,
+    descripcion_credito,
+    dpi,
+    nit,
+    abonos
+  ) => {
     const [result] = await db.query(
-      `INSERT INTO clientes (nombre, telefono, credito, descripcion_credito, dpi, nit)
-      VALUES (?, ?, ?, ?, ?, ?)`,
-      [nombre, telefono, credito, descripcion_credito, dpi, nit]
+      `INSERT INTO clientes (nombre, telefono, credito, descripcion_credito, dpi, nit, abonos)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [nombre, telefono, credito, descripcion_credito, dpi, nit, abonos]
     );
     return result.insertId;
   },
