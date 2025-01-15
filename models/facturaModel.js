@@ -78,14 +78,24 @@ const getById = async (id) => {
   }
 };
 
-// Eliminar una factura
-const deleteFactura = async (id) => {
+// Eliminar una factura por ID del cliente
+const deleteByClientId = async (clientId) => {
   try {
-    const query = "DELETE FROM facturas WHERE id_factura = ?";
-    const [result] = await db.execute(query, [id]);
+    // Primero, eliminar los detalles de las facturas asociadas al cliente
+    const queryDetalles = `
+      DELETE df FROM detalles_factura df
+      JOIN facturas f ON df.id_factura = f.id_factura
+      WHERE f.id_cliente = ?
+    `;
+    await db.execute(queryDetalles, [clientId]);
+
+    // Luego, eliminar las facturas asociadas al cliente
+    const queryFacturas = "DELETE FROM facturas WHERE id_cliente = ?";
+    const [result] = await db.execute(queryFacturas, [clientId]);
+
     return result;
   } catch (error) {
-    console.error("Error al eliminar la factura:", error);
+    console.error("Error al eliminar la factura por ID del cliente:", error);
     throw error;
   }
 };
@@ -135,6 +145,6 @@ module.exports = {
   create,
   getAll,
   getById,
-  delete: deleteFactura,
+  deleteByClientId,
   update,
 };
