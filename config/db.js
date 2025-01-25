@@ -4,6 +4,7 @@ require("dotenv").config();
 // Validación de las variables de entorno
 if (
   !process.env.DB_HOST ||
+  !process.env.DB_PORT ||
   !process.env.DB_USER ||
   !process.env.DB_PASSWORD ||
   !process.env.DB_NAME
@@ -16,6 +17,7 @@ if (
 // Creación del pool de conexiones
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
+  port: process.env.DB_PORT || 24942,
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "",
   database: process.env.DB_NAME || "sistema_ventas",
