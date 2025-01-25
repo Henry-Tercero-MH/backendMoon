@@ -6,11 +6,7 @@ const app = express();
 
 // Middlewares
 app.use(bodyParser.json());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-  })
-);
+app.use(cors());
 
 // Rutas
 const userRoutes = require("./routes/userRoutes");
